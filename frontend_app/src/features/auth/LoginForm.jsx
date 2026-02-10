@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom'
+import api from '../../api';
 
 const LoginForm = ({ onToggle }) => {
 
@@ -15,15 +16,19 @@ const LoginForm = ({ onToggle }) => {
         username: username,
         password: password,
       }
-      const response = await fetch('http://auth-app-service:8000',{
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        }
-      )
-      const data = await response.json()
+      // const response = await fetch('http://auth-app-service:8000',{
+      //     method: "POST",
+      //     headers: {
+      //       "Content-type": "application/json",
+      //     },
+      //     body: JSON.stringify(payload),
+      //   }
+      // )
+      const response = await api.post('/auth/login/',{
+        username,
+        password
+      })
+      const data = await response.data
 
       localStorage.setItem("userID", data.user.id);
       localStorage.setItem("access_token", data.access);
