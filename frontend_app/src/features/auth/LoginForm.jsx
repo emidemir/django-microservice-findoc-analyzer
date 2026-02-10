@@ -6,16 +6,16 @@ const LoginForm = ({ onToggle }) => {
 
   const navigate = useNavigate();
 
-  const [username, setUsername] = useState();
+  const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-      const payload = {
-        username: username,
-        password: password,
-      }
+      // const payload = {
+      //   email: username,
+      //   password: password,
+      // }
       // const response = await fetch('http://auth-app-service:8000',{
       //     method: "POST",
       //     headers: {
@@ -25,7 +25,7 @@ const LoginForm = ({ onToggle }) => {
       //   }
       // )
       const response = await api.post('/auth/login/',{
-        username,
+        email,
         password
       })
       const data = await response.data
@@ -45,7 +45,7 @@ const LoginForm = ({ onToggle }) => {
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label>Email</label>
-          <input type="email" placeholder="Enter your email" onChange={(e)=>setUsername(e.target.value)} required />
+          <input type="email" placeholder="Enter your email" onChange={(e)=>setEmail(e.target.value)} required />
         </div>
         <div className="form-group">
           <label>Password</label>

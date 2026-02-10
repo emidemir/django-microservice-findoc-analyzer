@@ -1,0 +1,42 @@
+/* Navbar.css */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    background: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .nav-logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e40af; /* Deep Blue for Finance */
+    text-decoration: none;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: #4b5563;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  
+  .nav-links a:hover { color: #1e40af; }
+  
+  .btn-logout {
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: none;
+    cursor: pointer;
+  }
