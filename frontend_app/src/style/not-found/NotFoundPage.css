@@ -1,0 +1,57 @@
+/* NotFound.css */
+.notfound-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f9fafb;
+    text-align: center;
+    padding: 20px;
+    font-family: 'Inter', sans-serif;
+  }
+  
+  .notfound-content h1 {
+    font-size: 8rem;
+    margin: 0;
+    font-weight: 800;
+    color: #d1d5db; /* Light gray for the 404 number */
+    line-height: 1;
+  }
+  
+  .notfound-content h2 {
+    font-size: 2rem;
+    color: #1f2937;
+    margin-top: -20px;
+  }
+  
+  .notfound-content p {
+    color: #6b7280;
+    margin-bottom: 2rem;
+    max-width: 450px;
+  }
+  
+  .home-link {
+    padding: 0.75rem 1.5rem;
+    background-color: #2563eb;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+  
+  .home-link:hover {
+    background-color: #1d4ed8;
+  }
+  
+  /* Optional: Simple floating animation */
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+  
+  .notfound-content h1 {
+    animation: float 4s ease-in-out infinite;
+  }
