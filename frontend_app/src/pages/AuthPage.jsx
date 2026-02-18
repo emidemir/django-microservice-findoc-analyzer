@@ -4,6 +4,7 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import LoginForm from '../features/auth/LoginForm';
 import SignupForm from '../features/auth/SignupForm';
 import '../style/auth/AuthStyles.css';
+import api from '../api'
 
 const AuthPage = () => {
   const [isLoginView, setIsLoginView] = useState(true);
@@ -11,17 +12,12 @@ const AuthPage = () => {
 
   const handleGoogleAuth = async (credentialResponse) => {
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/auth/google/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ access_token: credentialResponse.credential })
-      });
+      const response = await api.post('/auth/oauth/',{
+        access_token: credentialResponse.credential
+      })
+      const data = await response.data
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (response.status === 200) {
         localStorage.setItem("user", JSON.stringify(data.user)); // Stringify objects for localStorage
         localStorage.setItem('access_token', data.access);
         localStorage.setItem('refresh_token', data.refresh);

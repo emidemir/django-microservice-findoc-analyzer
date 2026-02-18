@@ -14,7 +14,7 @@ services:
       - ./gateway_app/:/app
     env_file:
       - ./gateway_app/.env
-
+  
   auth_service:
     build: ./auth_app/
     container_name: findoc-auth-service
@@ -31,6 +31,7 @@ services:
       - ./auth_app/:/app
     env_file:
       - ./auth_app/.env
+  
   auth_db:
     image: postgres:15-alpine
     container_name: findoc-auth-postgres
@@ -43,7 +44,36 @@ services:
     networks:
       - ai_network
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: findoc-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - ai_network
 
+  worker_service:
+    build: ./worker_app
+    container_name: findoc-worker-service
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8003:8000"
+    env_file:
+      - ./worker_app/.env
+    networks:
+      - ai_network
+
+  celery_worker:
+    build: ./worker_app
+    container_name: findoc-celery-worker
+    command: celery -A config worker --loglevel=info
+    environment:
+      - name=value
+    networks:
+      - ai_network
 networks:
   ai_network:
     driver: bridge

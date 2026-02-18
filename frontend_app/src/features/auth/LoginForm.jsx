@@ -12,18 +12,6 @@ const LoginForm = ({ onToggle }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try{
-      // const payload = {
-      //   email: username,
-      //   password: password,
-      // }
-      // const response = await fetch('http://auth-app-service:8000',{
-      //     method: "POST",
-      //     headers: {
-      //       "Content-type": "application/json",
-      //     },
-      //     body: JSON.stringify(payload),
-      //   }
-      // )
       const response = await api.post('/auth/login/',{
         email,
         password

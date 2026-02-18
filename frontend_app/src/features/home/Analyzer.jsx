@@ -1,6 +1,7 @@
 // Analyzer.jsx
 import React, { useState, useRef } from 'react';
 import '../../style/home/Analyzer.css';
+import api from '../../api.js'
 
 const Analyzer = () => {
   const [prompt, setPrompt] = useState('');
@@ -10,24 +11,51 @@ const Analyzer = () => {
   ]);
   const fileInputRef = useRef(null);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!prompt.trim() && files.length === 0) return;
 
-    // Add user message to UI
-    const newMessage = { role: 'user', text: prompt, attachments: files };
-    setChatHistory([...chatHistory, newMessage]);
+    // --- UI UPDATE (Keep this logic) ---
+    // React state handles File objects fine for display, so we keep this object for the UI
+    const newMessageForUI = { role: 'user', text: prompt, attachments: files };
+    setChatHistory([...chatHistory, newMessageForUI]);
     
+    // --- BACKEND REQUEST (Changed to FormData) ---
+    const formData = new FormData();
+    
+    // 1. Append text data
+    formData.append('text', prompt);
+    formData.append('role', 'user');
+
+    // 2. Append files
+    // iterate over the files array and append each one to the same key
+    files.forEach((file) => {
+      formData.append('attachments', file); 
+    });
+
     // Reset inputs
     setPrompt('');
     setFiles([]);
 
-    // Simulate AI Response (In reality, call your backend here)
-    setTimeout(() => {
-      setChatHistory(prev => [...prev, { 
-        role: 'ai', 
-        text: 'I have analyzed the documents. I see a 12% increase in operational costs compared to Q3...' 
-      }]);
-    }, 1000);
+    try {
+        // 3. Send formData
+        // Note: Do NOT manually set 'Content-Type': 'application/json'
+        // Axios/Fetch will automatically set it to 'multipart/form-data' with the correct boundary
+        const response = await api.post('/worker/upload/', formData);
+
+        if (response.status === 200){
+            // ... success logic
+            setChatHistory(prev => [...prev, { 
+              role: 'ai', 
+              text: 'I have analyzed the documents...' 
+            }]);
+          }
+        } catch (error) {
+          console.error(error);
+          setChatHistory(prev => [...prev, { 
+            role: 'ai', 
+            text: 'Something went wrong with the request' 
+          }]);
+    }
   };
 
   return (
@@ -73,6 +101,7 @@ const Analyzer = () => {
                 ref={fileInputRef} 
                 multiple 
                 hidden 
+                name="fin-documents"
                 onChange={(e) => setFiles(Array.from(e.target.files))}
               />
               {files.length > 0 && <span className="file-pill">{files.length} files</span>}

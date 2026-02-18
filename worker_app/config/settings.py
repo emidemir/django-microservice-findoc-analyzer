@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = str(os.getenv('SECRET_KEY')) # https://dev.to/themfon/how-to-protect-your-django-projects-secret-key-2ac6
+SECRET_KEY = 'django-insecure-g8mg1lxxp!&lgf99w1j-h=huu_ns6*#&_)7_-u2imnohmd&f5a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -38,14 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    'rest_framework',
-    'corsheaders',
-    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware', # Don't forget to add this
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -128,26 +124,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ==================== CORS SETTINGS =====================
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ],
-    # I just included this part so that you can remember learning parsers, and they are a thing. 
-    # 'DEFAULT_PARSER_CLASSES': [
-    #     'rest_framework.parsers.JSONParser',
-    # ]
-}
+# ============================== CELERY ==============================
+# https://docs.celeryq.dev/en/v5.5.3/django/first-steps-with-django.html
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
 
-
-# ==================== CORS SETTINGS =====================
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:8000",
-    "http://0.0.0.0:8000",
-]
-ALLOWED_HOSTS = ['*']
-
-CORS_ALLOW_ALL_ORIGINS = True 
-CORS_ALLOW_CREDENTIALS = True
+# =========================== CORS SETTINGS ===========================
+# ALLOWED_HOSTS expects hostnames or IP addresses, not URLs.
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")

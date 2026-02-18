@@ -20,9 +20,6 @@ SECRET_KEY = str(os.getenv('SECRET_KEY')) # https://dev.to/themfon/how-to-protec
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -170,12 +167,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # ==================== CORS SETTINGS =====================
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:8000",
-    "http://0.0.0.0:8000",
-    ""
-]
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
 
 # ===================== JWT SETTINGS =====================
 SIMPLE_JWT = {
@@ -188,6 +180,6 @@ SIMPLE_JWT = {
     "ALGORITHM": "HS256",
     "SIGNING_KEY": os.environ.get("SECRET_KEY"),
 }
-# =====================? USER MODEL ======================
+# ===================== USER MODEL ======================
 
 AUTH_USER_MODEL = 'users.User'

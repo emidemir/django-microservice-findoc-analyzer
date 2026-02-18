@@ -2,6 +2,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -9,6 +11,7 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 import requests
 
@@ -104,6 +107,7 @@ def Oauth(request):
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
 
+
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def Signup(request):
@@ -111,8 +115,8 @@ def Signup(request):
     
     email = request.data.get('email')
     password = request.data.get('password')
-    first_name = request.data.get('first_name', '')
-    last_name = request.data.get('last_name', '')
+
+    print(email, password)
     
     if not email or not password:
         return Response(
@@ -126,20 +130,17 @@ def Signup(request):
             {'error': 'User with this email already exists'},
             status=status.HTTP_400_BAD_REQUEST
         )
-    
-    try:
-        # Validate password
-        validate_password(password)
+    try:    
+        # Check if the password is a valid (STRONG) password
+        #validate_password(password)
         
         # Create user
         user = User.objects.create_user(
             username=email,
             email=email,
             password=password,
-            first_name=first_name,
-            last_name=last_name,
         )
-        
+
         # Generate JWT tokens
         refresh = RefreshToken.for_user(user)
         
@@ -224,3 +225,18 @@ def Logout(request):
         return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
     except Exception:
         return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class ValidateTokenView(APIView):
+    # This view requires a valid token to even be accessed
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # If the request reaches here, the token is valid!
+        # We return user info so the Gateway can forward it to other services if needed
+        return Response({
+            "valid": True,
+            "user_id": request.user.id,
+            "username": request.user.username
+        }, status=200)

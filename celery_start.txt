@@ -1,0 +1,27 @@
+1) pip install celery
+2) Create a celery.py file, and write something in the __init__.py file. This step can
+be found in this link: https://docs.celeryq.dev/en/v5.5.3/django/first-steps-with-django.html
+3) Install RabbitMQ as your message broker:
+   - For Docker: `docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:management`
+   - Or install locally based on your OS from rabbitmq.com
+
+4) Configure Celery to use RabbitMQ in your settings:
+   - Set `CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'`
+   - Set `CELERY_RESULT_BACKEND` (optional, can use RabbitMQ, Redis, or database)
+
+5) Define your tasks:
+   - Create a `tasks.py` file in your Django app
+   - Use the `@shared_task` decorator for tasks you want to run asynchronously
+
+6) Start the Celery worker:
+   - Run: `celery -A your_project_name worker --loglevel=info`
+
+7) (Optional) Start Celery Beat for periodic tasks:
+   - Run: `celery -A your_project_name beat --loglevel=info`
+
+8) For microservices specifically, consider:
+   - Using separate Celery workers per microservice
+   - Configuring different queues for different services
+   - Setting up task routing to direct tasks to appropriate workers
+
+Would you like me to elaborate on any of these steps or help with specific configuration for your microservice setup?
