@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 class AuthProxy(APIView):
     authentication_classes = []
@@ -139,6 +140,7 @@ class AuthProxy(APIView):
 class WorkerProxy(APIView):
     authentication_classes = []
     permission_classes = [AllowAny]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def validate_user(self, request):
         """
@@ -178,7 +180,7 @@ class WorkerProxy(APIView):
             prompt_text = request.data.get('text') 
 
             # 'getlist' to receive multiple files. 
-            # 'attachments' matches with formData.append('attachments', file)
+            # 'attachments' matches with formData.append('attachments', file) (frontend)
             uploaded_files = request.FILES.getlist('attachments') 
 
             if not uploaded_files and not prompt_text:
@@ -190,7 +192,7 @@ class WorkerProxy(APIView):
             files_payload = []
             for f in uploaded_files:
                 files_payload.append(('files', (f.name, f, f.content_type)))
-            data_payload = {'prompt': prompt_text}
+            data_payload = {'prompt': prompt_text, 'user_id': user_id}
             
             response = requests.post(url=url, data=data_payload, files=files_payload)
             return Response(response.json(), status=response.status_code)
