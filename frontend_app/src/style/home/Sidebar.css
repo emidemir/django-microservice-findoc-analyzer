@@ -61,3 +61,74 @@
     color: #1e40af;
     font-weight: 500;
   }
+
+  /* Add these styles to your existing Sidebar.css */
+
+.sidebar-section-title {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #9ca3af;
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+}
+
+/* Changed from button to div for better nesting */
+.chat-history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #4b5563;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.chat-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+/* Action Buttons Container */
+.chat-actions {
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0; /* Hidden by default */
+  transition: opacity 0.2s;
+}
+
+/* Show actions on hover OR if the chat is currently active */
+.chat-history-item:hover .chat-actions,
+.chat-history-item.active .chat-actions {
+  opacity: 1;
+}
+
+.action-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0.2rem;
+  opacity: 0.6;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.action-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.rename-input {
+  flex: 1;
+  background: transparent;
+  border: 1px solid #3b82f6;
+  border-radius: 4px;
+  padding: 0.2rem 0.4rem;
+  font-size: 0.9rem;
+  color: #1f2937;
+  outline: none;
+  width: 100%;
+}

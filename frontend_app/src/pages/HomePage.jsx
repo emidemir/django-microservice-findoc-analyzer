@@ -45,6 +45,35 @@ const HomePage = () => {
     );
   };
 
+  const handleDeleteChat = (chatId) => {
+    const updatedChats = chats.filter(chat => chat.id !== chatId);
+    
+    if (updatedChats.length > 0) {
+      setChats(updatedChats);
+      // If we deleted the currently active chat, switch to the first available one
+      if (activeChatId === chatId) {
+        setActiveChatId(updatedChats[0].id);
+      }
+    } else {
+      // If all chats are deleted, explicitly create a fresh one to avoid state race conditions
+      const fallbackChat = {
+        id: Date.now(),
+        title: 'New Chat',
+        messages: [initialMessage]
+      };
+      setChats([fallbackChat]);
+      setActiveChatId(fallbackChat.id);
+    }
+  };
+
+  const handleRenameChat = (chatId, newTitle) => {
+    setChats(prevChats => 
+      prevChats.map(chat => 
+        chat.id === chatId ? { ...chat, title: newTitle } : chat
+      )
+    );
+  };
+  
   // Find the currently active chat object to pass to the Analyzer
   const activeChat = chats.find(chat => chat.id === activeChatId);
 
@@ -55,7 +84,9 @@ const HomePage = () => {
         chats={chats} 
         activeChatId={activeChatId} 
         onSelectChat={setActiveChatId} 
-        onNewChat={handleNewChat} 
+        onNewChat={handleNewChat}
+        onDeleteChat={handleDeleteChat} /* Added missing prop */
+        onRenameChat={handleRenameChat} /* Added missing prop */
       />
       
       {/* Right Content Area */}

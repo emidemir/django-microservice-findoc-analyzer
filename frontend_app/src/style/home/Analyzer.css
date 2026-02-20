@@ -111,3 +111,90 @@
   align-items: center;
   justify-content: center;
 }
+
+/* --- Edit Prompt Styles --- */
+
+/* The wrapper around the text to allow absolute positioning of the edit icon */
+.message-text {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.btn-edit-icon {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0; /* Hidden by default */
+  margin-left: 10px;
+  font-size: 0.9rem;
+  transition: opacity 0.2s ease-in-out;
+  vertical-align: middle;
+}
+
+/* Show the pencil icon when hovering over the message content */
+.message-content:hover .btn-edit-icon {
+  opacity: 0.5;
+}
+
+.btn-edit-icon:hover {
+  opacity: 1 !important;
+}
+
+.edit-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px;
+  width: 100%;
+}
+
+.edit-textarea {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  resize: vertical;
+  margin-bottom: 8px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.edit-textarea:focus {
+  border-color: #3b82f6;
+}
+
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-cancel, .btn-save {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+}
+
+.btn-cancel {
+  background: transparent;
+  color: #475569;
+}
+
+.btn-cancel:hover {
+  background: #e2e8f0;
+}
+
+.btn-save {
+  background: #1e40af;
+  color: white;
+}
+
+.btn-save:hover {
+  background: #1e3a8a;
+}
